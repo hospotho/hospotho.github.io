@@ -2,14 +2,114 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Tony's Homepage</title>
 </head>
 
 <body>
-    <h1>Projects</h1>
-    <a href="http://hospotho.github.io/wf-skill">wf skill timeline</a>
+  <div class="container">
+    <nav id="menu">
+      <ul>
+        <li><a href="#top">Top</a></li>
+        <li><a href="#project">Projects</a></li>
+        <li><a href="#chickenSoup">Chicken Soup</a></li>
+        <li><a href="#contact">Contact Me</a></li>
+      </ul>
+    </nav>
+
+    <canvas id="background1"></canvas>
+    <canvas id="background2"></canvas>
+    <canvas id="background3"></canvas>
+
+    <section id="top">
+      <div>
+        <h1>Welcome to Tony's homepage</h1>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius corrupti fugiat architecto totam harum optio
+          doloremque error voluptatem illo! Maiores in omnis ipsa a nostrum minus
+          perspiciatis dignissimos aut autem.
+        </p>
+      </div>
+    </section>
+
+    <section id="project">
+      <div>
+        <h1>My Projects</h1>
+        <table>
+          <tr>
+            <td>
+              <a href="https://github.com/hospotho/hospotho.github.io">This homepage</a>
+            </td>
+            <td>
+              <span id="homepageDate" class="projectTag"></span>
+            </td>
+            <td>
+              <span id="homepageCount" class="projectTag"></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="https://github.com/hospotho/Image-Viewer">Image Viewer</a>
+            </td>
+            <td>
+              <span id="image_viewerDate" class="projectTag"></span>
+            </td>
+            <td>
+              <span id="image_viewerCount" class="projectTag"></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="https://github.com/hospotho/rangeDeleteBot">Discord Bot</a>
+            </td>
+            <td>
+              <span id="discord_botDate" class="projectTag"></span>
+            </td>
+            <td>
+              <span id="discord_botCount" class="projectTag"></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="http://hospotho.github.io/wf-skill">WF skill timeline</a>
+            </td>
+            <td>
+              <span id="wf_skillDate" class="projectTag"></span>
+            </td>
+            <td>
+              <span id="wf_skillCount" class="projectTag"></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="https://github.com/hospotho/Bitburner-script">Bitburner-script</a>
+            </td>
+            <td>
+              <span id="bitburner_scriptDate" class="projectTag"></span>
+            </td>
+            <td>
+              <span id="bitburner_scriptCount" class="projectTag"></span>
+            </td>
+          </tr>
+        </table>
+        <br>
+        <p>Check out all my projects on my github</p>
+      </div>
+    </section>
+
+    <section id="chickenSoup">
+      <div>
+        <h1>Random chicken Soup</h1>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h1>Contact Me</h1>
+    </section>
+  </div>
 </body>
+<script src="script.js"></script>
 
 </html>
