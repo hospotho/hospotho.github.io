@@ -8,129 +8,129 @@
   }
 
   function initCanvasBackground() {
-    function drawColorGraph(ctx, location = 0) {
-      function createColorizeGraph() {
-        function createRandomGraph() {
-          const array = new Array(heightIndex)
-          for (let i = 0; i < heightIndex; i += 2) {
-            const subArrayH = new Array(widthIndex)
-            for (let j = 0; j < widthIndex; j++) {
-              subArrayH[j] = Math.random()
-            }
-            const subArrayV = new Array(widthIndex + 1)
-            for (let j = 0; j < widthIndex + 1; j++) {
-              subArrayV[j] = Math.random()
-            }
-            array[i] = subArrayH
-            array[i + 1] = subArrayV
+    function createColorizeGraph() {
+      function visitNode(i, j, sub = false) {
+        if (visitedNode.has(a2s([i, j]))) return
+        visitedNode.add(a2s([i, j]))
+        unvisitedNode.delete(a2s([i, j]))
+        waitingNode.delete(a2s([i, j]))
+        if (graph[i][j] < pRate) return
+
+        coloredGraph[i][j] = count
+
+        if (i % 2) {
+          if (unvisitedNode.has(a2s([i - 2, j]))) {
+            waitingNode.add(a2s([i - 2, j]))
           }
+          if (unvisitedNode.has(a2s([i - 1, j - 1]))) {
+            waitingNode.add(a2s([i - 1, j - 1]))
+          }
+          if (unvisitedNode.has(a2s([i - 1, j]))) {
+            waitingNode.add(a2s([i - 1, j]))
+          }
+          if (unvisitedNode.has(a2s([i + 1, j - 1]))) {
+            waitingNode.add(a2s([i + 1, j - 1]))
+          }
+          if (unvisitedNode.has(a2s([i + 1, j]))) {
+            waitingNode.add(a2s([i + 1, j]))
+          }
+          if (unvisitedNode.has(a2s([i + 2, j]))) {
+            waitingNode.add(a2s([i + 2, j]))
+          }
+        } else {
+          if (unvisitedNode.has(a2s([i - 1, j]))) {
+            waitingNode.add(a2s([i - 1, j]))
+          }
+          if (unvisitedNode.has(a2s([i - 1, j + 1]))) {
+            waitingNode.add(a2s([i - 1, j + 1]))
+          }
+          if (unvisitedNode.has(a2s([i, j - 1]))) {
+            waitingNode.add(a2s([i, j - 1]))
+          }
+          if (unvisitedNode.has(a2s([i, j + 1]))) {
+            waitingNode.add(a2s([i, j + 1]))
+          }
+          if (unvisitedNode.has(a2s([i + 1, j]))) {
+            waitingNode.add(a2s([i + 1, j]))
+          }
+          if (unvisitedNode.has(a2s([i + 1, j + 1]))) {
+            waitingNode.add(a2s([i + 1, j + 1]))
+          }
+        }
+
+        while (!sub && waitingNode.size) {
+          const [newi, newj] = s2a(waitingNode.values().next().value)
+          visitNode(newi, newj, true)
+        }
+      }
+      const createRandomGraph = () => {
+        const array = new Array(heightIndex)
+        for (let i = 0; i < heightIndex; i += 2) {
           const subArrayH = new Array(widthIndex)
           for (let j = 0; j < widthIndex; j++) {
             subArrayH[j] = Math.random()
           }
-          array[heightIndex] = subArrayH
-          return array
-        }
-        function createEmptyGraph() {
-          const array = new Array(heightIndex)
-          for (let i = 0; i < heightIndex; i += 2) {
-            const subArrayH = new Array(widthIndex)
-            for (let j = 0; j < widthIndex; j++) {
-              subArrayH[j] = 0
-            }
-            const subArrayV = new Array(widthIndex + 1)
-            for (let j = 0; j < widthIndex + 1; j++) {
-              subArrayV[j] = 0
-            }
-            array[i] = subArrayH
-            array[i + 1] = subArrayV
+          const subArrayV = new Array(widthIndex + 1)
+          for (let j = 0; j < widthIndex + 1; j++) {
+            subArrayV[j] = Math.random()
           }
+          array[i] = subArrayH
+          array[i + 1] = subArrayV
+        }
+        const subArrayH = new Array(widthIndex)
+        for (let j = 0; j < widthIndex; j++) {
+          subArrayH[j] = Math.random()
+        }
+        array[heightIndex] = subArrayH
+        return array
+      }
+      const createEmptyGraph = () => {
+        const array = new Array(heightIndex)
+        for (let i = 0; i < heightIndex; i += 2) {
           const subArrayH = new Array(widthIndex)
           for (let j = 0; j < widthIndex; j++) {
             subArrayH[j] = 0
           }
-          array[heightIndex] = subArrayH
-          return array
-        }
-        function visitNode(i, j, sub = false) {
-          if (visitedNode.has(a2s([i, j]))) return
-          visitedNode.add(a2s([i, j]))
-          unvisitedNode.delete(a2s([i, j]))
-          waitingNode.delete(a2s([i, j]))
-          if (graph[i][j] < pRate) return
-
-          coloredGraph[i][j] = count
-
-          if (i % 2) {
-            if (unvisitedNode.has(a2s([i - 2, j]))) {
-              waitingNode.add(a2s([i - 2, j]))
-            }
-            if (unvisitedNode.has(a2s([i - 1, j - 1]))) {
-              waitingNode.add(a2s([i - 1, j - 1]))
-            }
-            if (unvisitedNode.has(a2s([i - 1, j]))) {
-              waitingNode.add(a2s([i - 1, j]))
-            }
-            if (unvisitedNode.has(a2s([i + 1, j - 1]))) {
-              waitingNode.add(a2s([i + 1, j - 1]))
-            }
-            if (unvisitedNode.has(a2s([i + 1, j]))) {
-              waitingNode.add(a2s([i + 1, j]))
-            }
-            if (unvisitedNode.has(a2s([i + 2, j]))) {
-              waitingNode.add(a2s([i + 2, j]))
-            }
-          } else {
-            if (unvisitedNode.has(a2s([i - 1, j]))) {
-              waitingNode.add(a2s([i - 1, j]))
-            }
-            if (unvisitedNode.has(a2s([i - 1, j + 1]))) {
-              waitingNode.add(a2s([i - 1, j + 1]))
-            }
-            if (unvisitedNode.has(a2s([i, j - 1]))) {
-              waitingNode.add(a2s([i, j - 1]))
-            }
-            if (unvisitedNode.has(a2s([i, j + 1]))) {
-              waitingNode.add(a2s([i, j + 1]))
-            }
-            if (unvisitedNode.has(a2s([i + 1, j]))) {
-              waitingNode.add(a2s([i + 1, j]))
-            }
-            if (unvisitedNode.has(a2s([i + 1, j + 1]))) {
-              waitingNode.add(a2s([i + 1, j + 1]))
-            }
+          const subArrayV = new Array(widthIndex + 1)
+          for (let j = 0; j < widthIndex + 1; j++) {
+            subArrayV[j] = 0
           }
-
-          while (!sub && waitingNode.size) {
-            const [newi, newj] = s2a(waitingNode.values().next().value)
-            visitNode(newi, newj, true)
-          }
+          array[i] = subArrayH
+          array[i + 1] = subArrayV
         }
-        const a2s = arr => arr[0] * 10000 + arr[1]
-        const s2a = num => [(num - (num % 10000)) / 10000, num % 10000]
-
-        const graph = createRandomGraph()
-        const coloredGraph = createEmptyGraph()
-        const visitedNode = new Set()
-        const waitingNode = new Set()
-        const unvisitedNode = new Set()
-
-        for (let i = 0; i < heightIndex; i++) {
-          for (let j = 0; j < widthIndex + (i % 2); j++) {
-            unvisitedNode.add(a2s([i, j]))
-          }
+        const subArrayH = new Array(widthIndex)
+        for (let j = 0; j < widthIndex; j++) {
+          subArrayH[j] = 0
         }
-
-        let count = 1
-        while (unvisitedNode.size !== 0) {
-          const [i, j] = s2a(unvisitedNode.values().next().value)
-          const temp = visitedNode.size
-          visitNode(i, j)
-          if (visitedNode.size > temp + 1) count++
-        }
-
-        return coloredGraph
+        array[heightIndex] = subArrayH
+        return array
       }
+      const a2s = arr => arr[0] * 10000 + arr[1]
+      const s2a = num => [(num - (num % 10000)) / 10000, num % 10000]
+
+      const graph = createRandomGraph()
+      const coloredGraph = createEmptyGraph()
+      const visitedNode = new Set()
+      const waitingNode = new Set()
+      const unvisitedNode = new Set()
+
+      for (let i = 0; i < heightIndex; i++) {
+        for (let j = 0; j < widthIndex + (i % 2); j++) {
+          unvisitedNode.add(a2s([i, j]))
+        }
+      }
+
+      let count = 1
+      while (unvisitedNode.size !== 0) {
+        const [i, j] = s2a(unvisitedNode.values().next().value)
+        const temp = visitedNode.size
+        visitNode(i, j)
+        if (visitedNode.size > temp + 1) count++
+      }
+
+      return coloredGraph
+    }
+    function drawColorGraph(ctx, location = 0) {
       function getGraphMax(arr) {
         const array = arr.flat()
         let max = array[0]
@@ -179,7 +179,7 @@
         ctx.stroke()
       }
     }
-    
+
     const pixelSize = 10
     const padding = 20
     const pRate = 0.5
@@ -195,8 +195,6 @@
 
     const widthIndex = Math.ceil(canvasWidthPixels)
     const heightIndex = Math.ceil(canvasHeightPixels * 2)
-
-
 
     const canvas = document.querySelector('canvas#background')
     const ctx = canvas.getContext('2d')
