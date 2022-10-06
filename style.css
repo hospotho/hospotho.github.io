@@ -214,5 +214,38 @@ section#project table {
   margin-right: auto;
 }
 section#project td {
-  width: 250px;
+  text-align: left;
+  padding: 0 10px;
+}
+section#project td:last-child {
+  padding: 0;
+}
+
+section#chickenSoup div {
+  height: 80%;
+  width: 80%;
+  color: rgb(223, 210, 210);
+  background-color: rgba(20, 20, 20, 0.8);
+}
+section#chickenSoup div {
+  position: relative;
+  width: 100%;
+}
+section#chickenSoup img {
+  max-width: 90%;
+  max-height: 90%;
+  z-index: -1;
+}
+section#chickenSoup .wrapper {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background-color: rgba(200, 200, 200, 0);
+}
+section#chickenSoup span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -60%);
 }

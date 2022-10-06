@@ -2,19 +2,15 @@
   'use strict'
 
   function initNav() {
-    function resize() {
-      const nav = document.querySelector('nav#menu')
-      const width = document.querySelector('section#top').clientWidth
-      nav.style.width = width + 'px'
-    }
-    resize()
-    window.addEventListener('resize', resize)
+    const nav = document.querySelector('nav#menu')
+    const width = document.querySelector('section#top').clientWidth
+    nav.style.width = width + 'px'
   }
 
   function initCanvasBackground() {
     const pixelSize = 5
     const width = document.querySelector('section#top').clientWidth / pixelSize
-    const height = document.querySelector('section#top').clientWidth / pixelSize
+    const height = document.querySelector('section#top').clientHeight / pixelSize
     const widthIndex = width + 1
     const heightIndex = height * 2 + 1
     const pRate = 0.5
@@ -158,7 +154,8 @@
 
     initCanvas(canvas1)
 
-    setInterval(() => {
+    clearInterval(canvasInterval)
+    canvasInterval = setInterval(() => {
       const left = window.getComputedStyle(canvas1).left.slice(0, -2)
       const right = window.getComputedStyle(canvas3).left.slice(0, -2)
       if (left === '0') {
@@ -211,16 +208,41 @@
   }
 
   function initSoupDiv() {
-    const div = document.querySelector('div#chickenSoup')
+    const folder = 'chickenSoup/'
+    const imgURL = ['de.jpg', 'mo.jpg', 'sea.jpg', 'sno.jpg', 'sta.jpg']
+    const quotes = [
+      '“Perfection has to do with the end product, but excellence has to do with the process.” – Jerry Moran',
+      '“Excellence is a continuous process and not an accident.” – A. P. J. Abdul Kalam',
+      '“We are what we repeatedly do. Excellence then is not an act, but a habit." – Will Durant',
+      '“The road to excellence is always under construction.” – Anonymous',
+      '“You’ve got to get up every morning with determination if you’re going to go to bed with satisfaction." – George Lorimer',
+      '“Failure will never overtake me if my determination to succeed is strong enough.” – Og Mandino',
+      '“A dream doesn’t become reality through magic; it takes sweat, determination and hard work.” – Colin Powell',
+      '“Happiness is an attitude of mind, born of the simple determination to be happy under all outward circumstances.” – J. Donald Walters',
+      '“You were designed for accomplishment, engineered for success, and endowed with the seeds of greatness.” – Zig Ziglar',
+      '“Stick to your true north — build greatness for the long term.” – Ruth Porat',
+      '“To achieve greatness one should live as if they will never die.” – Francois de La Rochefoucauld',
+      '“Big dreams create the magic that stir men’s souls to greatness.” — Bill McCartney'
+    ]
+
+    const img = document.querySelector('img#chickenSoupImg')
+    const wrapper = document.querySelector('section#chickenSoup .wrapper')
+    const button = document.querySelector('button#refresh')
+    wrapper.width = img.clientWidth + 'px'
+    wrapper.height = img.clientHeight + 'px'
+    wrapper.style = `left: ${(0.5 - img.clientWidth / window.clientWidth / 2) * 100}%;`
   }
 
   function init() {
     initNav()
     initCanvasBackground()
     initProjectDiv()
-    // initSoupDiv()
+    initSoupDiv()
     // initDivTransition()
   }
 
+  let canvasInterval
+
   init()
+  window.addEventListener('resize', init)
 })()
