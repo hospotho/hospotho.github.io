@@ -1,6 +1,12 @@
 ;(function () {
   'use strict'
 
+  function replaceElementWithClone(element) {
+    //use for remove event listener
+    const newElement = element.cloneNode(true)
+    element.parentNode.replaceChild(newElement, element)
+  }
+
   function initNav() {
     const nav = document.querySelector('nav#menu')
     const width = document.querySelector('section#top').clientWidth
@@ -105,8 +111,8 @@
         array[heightIndex] = subArrayH
         return array
       }
-      const a2s = arr => arr[0] * 10000 + arr[1]
-      const s2a = num => [(num - (num % 10000)) / 10000, num % 10000]
+      const a2s = arr => (arr[0] << 16) | arr[1]
+      const s2a = num => [num >> 16, num & 0xffff]
 
       const graph = createRandomGraph()
       const coloredGraph = createEmptyGraph()
@@ -114,10 +120,16 @@
       const waitingNode = new Set()
       const unvisitedNode = new Set()
 
-      for (let i = 0; i < heightIndex; i++) {
-        for (let j = 0; j < widthIndex + (i % 2); j++) {
+      for (let i = 0; i < heightIndex; i += 2) {
+        for (let j = 0; j < widthIndex; j++) {
           unvisitedNode.add(a2s([i, j]))
         }
+        for (let j = 0; j < widthIndex + 1; j++) {
+          unvisitedNode.add(a2s([i + 1, j]))
+        }
+      }
+      for (let j = 0; j < widthIndex; j++) {
+        unvisitedNode.add(a2s([heightIndex, j]))
       }
 
       let count = 1
@@ -128,21 +140,12 @@
         if (visitedNode.size > temp + 1) count++
       }
 
-      return coloredGraph
+      return [coloredGraph, count - 1]
     }
     function drawColorGraph(ctx, location = 0) {
-      function getGraphMax(arr) {
-        const array = arr.flat()
-        let max = array[0]
-        for (let i = 0; i < array.length; i++) {
-          max = array[i] > max ? array[i] : max
-        }
-        return max
-      }
       const numToColor = num => '#' + Math.floor(16777215 - ((num * 0.9) / max) * 16777215).toString(16)
 
-      const coloredGraph = createColorizeGraph()
-      const max = getGraphMax(coloredGraph)
+      const [coloredGraph, max] = createColorizeGraph()
       const left = bodyWidth * location + padding
 
       ctx.clearRect(left, 0, bodyWidth, bodyHeight)
@@ -188,18 +191,20 @@
     const bodyHeight = document.documentElement.clientHeight
     const containerWidth = document.querySelector('section#top').clientWidth
 
-    const canvasWidth = containerWidth - padding * 2
-    const canvasHeight = bodyHeight - padding * 2
-    const canvasWidthPixels = canvasWidth / pixelSize
-    const canvasHeightPixels = canvasHeight / pixelSize
+    const drawAreaWidth = containerWidth - padding * 2
+    const drawAreaHeight = bodyHeight - padding * 2
+    const horizontalPixels = drawAreaWidth / pixelSize
+    const verticalPixels = drawAreaHeight / pixelSize
 
-    const widthIndex = Math.ceil(canvasWidthPixels)
-    const heightIndex = Math.ceil(canvasHeightPixels * 2)
+    const widthIndex = Math.ceil(horizontalPixels)
+    const heightIndex = Math.ceil(verticalPixels * 2)
 
+    replaceElementWithClone(document.querySelector('canvas#background'))
     const canvas = document.querySelector('canvas#background')
     const ctx = canvas.getContext('2d')
     ctx.canvas.width = bodyWidth * 3
     ctx.canvas.height = bodyHeight
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     drawColorGraph(ctx)
     drawColorGraph(ctx, 1)
@@ -207,7 +212,7 @@
 
     canvas.style = 'animation: loop ease 16s infinite alternate;'
 
-    const loop = () => {
+    const action = () => {
       const transform = window.getComputedStyle(canvas).transform
       if (transform === 'matrix(1, 0, 0, 1, 0, 0)') {
         drawColorGraph(ctx, 1)
@@ -217,12 +222,11 @@
         drawColorGraph(ctx, 1)
       }
     }
-    canvas.removeEventListener('animationiteration', loop)
-    canvas.addEventListener('animationiteration', loop)
+    canvas.addEventListener('animationiteration', action)
   }
 
   async function initProjectDiv() {
-    function formatDate(date) {
+    const formatDate = date => {
       const d = new Date(date)
       const year = d.getFullYear()
       const month = (d.getMonth() + 1).toString().padStart(2, '0')
@@ -260,6 +264,14 @@
   }
 
   function initSoupDiv() {
+    const randomIndex = (length, curr) => {
+      let newIndex = Math.floor(length * Math.random())
+      while (newIndex === curr) {
+        newIndex = Math.floor(length * Math.random())
+      }
+      return newIndex
+    }
+
     const folder = 'chickenSoup/'
     const imgURL = ['de-small.jpg', 'mo-small.jpg', 'sea-small.jpg', 'sno-small.jpg', 'sta-small.jpg']
     const quotes = [
@@ -277,28 +289,19 @@
       '“Big dreams create the magic that stir men’s souls to greatness.” — Bill McCartney'
     ]
 
+    replaceElementWithClone(document.querySelector('button#refresh'))
     const wrapper = document.querySelector('section#chickenSoup .chickenSoupFrame')
     const span = wrapper.querySelector('span#chickenSoupCation')
     const button = document.querySelector('button#refresh')
 
     let imgIndex = 0
     let quoteIndex = 0
-
-    const randomIndex = (length, curr) => {
-      let newIndex = Math.floor(length * Math.random())
-      while (newIndex === curr) {
-        newIndex = Math.floor(length * Math.random())
-      }
-      return newIndex
-    }
-
     const action = () => {
       imgIndex = randomIndex(imgURL.length, imgIndex)
       quoteIndex = randomIndex(quotes.length, quoteIndex)
       wrapper.style = `background-image: url("${folder + imgURL[imgIndex]}");`
       span.innerHTML = quotes[quoteIndex]
     }
-    button.removeEventListener('click', action)
     button.addEventListener('click', action)
   }
 
